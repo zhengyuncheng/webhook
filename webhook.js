@@ -7,6 +7,8 @@ function sign(body) {
     return `sha1=` + crypto.createHmac('sha1', SECRET).update(body).digest('hex')
 }
 let server = http.createServer(function (req, res) {
+    console.log('method', req.method)
+    console.log('url', req.url)
     if (req.method == 'POST' && req.url == '/webhook') {
         let buffers = []
         req.on('data', function (buffer) {
@@ -31,7 +33,7 @@ let server = http.createServer(function (req, res) {
                     buffers.push(buffer)
                 })
                 child.stdout.on('end', function (buffer) {
-                    let log = Buffer.concat(buffers).toString()
+                    let log = Buffer.concat(buffers)
                     console.log(log)
                 })
             }
