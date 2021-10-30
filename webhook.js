@@ -28,13 +28,14 @@ let server = http.createServer(function (req, res) {
                 // 开始部署
                 let payload = JSON.parse(body)
                 // 新开子线程运行 shell脚本
+                console.log('repository.name', payload.repository.name)
                 let child = spawn('sh', [`./${payload.repository.name}.sh`])
                 child.stdout.on('data', function (buffer) {
                     buffers.push(buffer)
                 })
                 child.stdout.on('end', function (buffer) {
                     let log = Buffer.concat(buffers)
-                    console.log(log)
+                    console.log(log.toString())
                 })
             }
         })
